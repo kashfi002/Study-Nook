@@ -15,6 +15,7 @@ const Navbar = () => {
         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
         <li><Link href={'/'} className='font-semibold'>Home</Link></li>
       <li><Link href={'/rooms'} className='font-semibold'>Rooms</Link></li>
+      <li><Link href={'/add-room'} className='font-semibold'>Add Rooms</Link></li>
       </ul>
     </div>
     <h1 className="text-[#2563EB] font-bold text-xl">Study-Nook</h1>
@@ -23,6 +24,7 @@ const Navbar = () => {
     <ul className="menu menu-horizontal px-1">
       <li><Link href={'/'} className='font-semibold'>Home</Link></li>
       <li><Link href={'/rooms'} className='font-semibold'>Rooms</Link></li>
+      <li><Link href={'/add-room'} className='font-semibold'>Add Rooms</Link></li>
     </ul>
   </div>
   <div className="navbar-end">
