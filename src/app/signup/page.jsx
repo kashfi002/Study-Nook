@@ -4,9 +4,11 @@ import { Button, Card, Description, FieldError, Form, Input, Label, TextField } 
 import { authClient } from "@/lib/auth-client";
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
-
-
+import { FaGoogle } from "react-icons/fa";
+import { createAuthClient } from "better-auth/client";
 const SignUpPage = () => {
+    const router = useRouter();
+    const authClient = createAuthClient();
     const onSubmit=async(e)=>{
       e.preventDefault();
        const formData = new FormData(e.currentTarget)
@@ -32,6 +34,11 @@ const SignUpPage = () => {
         },
 });
     }
+    const handleGoogleSignUp = async () => {
+  const data = await authClient.signIn.social({
+    provider: "google",
+  });
+};
     return (
         <Card className='flex items-center'>
             <h1 className='font-bold text-2xl text-center'>Create Account </h1>
@@ -93,11 +100,16 @@ const SignUpPage = () => {
         <Description>Must be at least 8 characters with 1 uppercase and 1 number</Description>
         <FieldError />
       </TextField>
-      <div className="flex gap-2">
-        <Button type="submit">
+      <div className="flex gap-2 items-center">
+        <Button type="submit w-full">
           <Check />
           Create Account
         </Button>
+      </div>
+      <div>
+        <button 
+        onClick={handleGoogleSignUp}
+        className='flex items-center gap-2 w-full'><span>Sign up with google</span><FaGoogle/></button>
       </div>
     </Form>
         </Card>
