@@ -12,12 +12,9 @@ const LogInPage = () => {
        const formData = new FormData(e.currentTarget)
         const user = Object.fromEntries(formData.entries())
        
-        const { data, error } = await authClient.signUp.email({
+        const { data, error } = await authClient.signIn.email({
         email:user.email, 
         password:user.password,
-        name:user.name,
-        image:user.image 
-       
     }, {
         onRequest: (ctx) => {
             //show loading
@@ -33,27 +30,9 @@ const LogInPage = () => {
     }
     return (
         <Card className='flex items-center'>
-            <h1 className='font-bold text-2xl text-center'>Create Account </h1>
+            <h1 className='font-bold text-2xl text-center'>Log In </h1>
              <Form className="flex w-96 flex-col gap-4" onSubmit={onSubmit}>
-                <TextField
-        isRequired
-        name="name"
-        type="text"
-      >
-        <Label>Name</Label>
-        <Input placeholder="Enter your name" />
-        <FieldError />
-      </TextField>
-
-      <TextField
-        name="image"
-        type="url"
-      >
-        <Label>Image</Label>
-        <Input placeholder="Enter your image URL" />
-        <FieldError />
-      </TextField>
-
+           
       <TextField
         isRequired
         name="email"
@@ -95,7 +74,7 @@ const LogInPage = () => {
       <div className="flex gap-2">
         <Button type="submit">
           <Check />
-          Create Account
+        Log In
         </Button>
       </div>
     </Form>

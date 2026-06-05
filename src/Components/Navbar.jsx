@@ -1,7 +1,19 @@
+"use client"
 import Link from 'next/link';
 import React from 'react';
+import { authClient } from "@/lib/auth-client"
+import { Avatar } from '@heroui/react';
+
 
 const Navbar = () => {
+
+  const handleLogout=async()=>{
+    await authClient.signOut();
+  }
+  const { 
+        data: session, 
+    } = authClient.useSession() 
+    const user = session?.user
     return (
         <div>
             <div className="navbar bg-base-100 shadow-sm">
@@ -28,8 +40,30 @@ const Navbar = () => {
     </ul>
   </div>
   <div className="navbar-end">
+    {
+      user?
+      <>
+      <div>
+         <Link href={'/signup'}>Profile</Link>
+      </div>
+      <div>
+         <Avatar>
+        <Avatar.Image alt="John Doe" src={user?.image} />
+        <Avatar.Fallback>{user?.name?.charAt(0)}</Avatar.Fallback>
+      </Avatar>
+      </div>
+      <div>
+        <button 
+        onClick={handleLogout}
+        className='btn btn-error'>Logout</button>
+      </div>
+      </>
+       :<>
   <Link href={'/signup'}>Sign Up</Link>
    <Link href={'/login'}>Log In</Link>
+ </>
+    }
+
   </div>
 </div>
         </div>

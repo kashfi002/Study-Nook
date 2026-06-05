@@ -23,11 +23,11 @@ const SignUpPage = () => {
             //show loading
         },
         onSuccess: (ctx) => {
-           toast.success("Login Successful")
+           toast.success("You Have Successfully signed up")
            redirect('/')
         },
         onError: (ctx) => {
-            toast.error("Login Failed!!!")
+            toast.error("Signup Failed!!!")
         },
 });
     }
