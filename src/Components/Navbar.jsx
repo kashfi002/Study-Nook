@@ -3,12 +3,15 @@ import Link from 'next/link';
 import React from 'react';
 import { authClient } from "@/lib/auth-client"
 import { Avatar } from '@heroui/react';
-
+import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
+  const router = useRouter();
 
   const handleLogout=async()=>{
     await authClient.signOut();
+    router.push('/');
+    router.refresh();
   }
   const { 
         data: session, 
@@ -40,30 +43,31 @@ const Navbar = () => {
     </ul>
   </div>
   <div className="navbar-end">
+    <ul className="menu menu-horizontal px-1 gap-4">
     {
       user?
       <>
-      <div>
+      <li>
          <Link href={'/signup'}>Profile</Link>
-      </div>
-      <div>
-         <Avatar>
-        <Avatar.Image alt="John Doe" src={user?.image} />
+      </li>
+      <li>
+         <Avatar className='rounded-full'>
+       <Avatar.Image alt="John Doe" src={user?.image} />
         <Avatar.Fallback>{user?.name?.charAt(0)}</Avatar.Fallback>
       </Avatar>
-      </div>
-      <div>
+      </li>
+      <li>
         <button 
         onClick={handleLogout}
         className='btn btn-error'>Logout</button>
-      </div>
+      </li>
       </>
        :<>
-  <Link href={'/signup'}>Sign Up</Link>
-   <Link href={'/login'}>Log In</Link>
+  <li><Link href={'/signup'}>Sign Up</Link></li>
+   <li><Link href={'/login'}>Log In</Link></li>
  </>
     }
-
+</ul>
   </div>
 </div>
         </div>

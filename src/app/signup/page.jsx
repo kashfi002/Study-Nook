@@ -3,7 +3,7 @@ import { Check } from '@gravity-ui/icons';
 import { Button, Card, Description, FieldError, Form, Input, Label, TextField } from '@heroui/react';
 import { authClient } from "@/lib/auth-client";
 import { toast } from 'react-toastify';
-import { redirect } from "next/navigation";
+import { useRouter } from 'next/navigation';
 
 
 const SignUpPage = () => {
@@ -24,7 +24,8 @@ const SignUpPage = () => {
         },
         onSuccess: (ctx) => {
            toast.success("You Have Successfully signed up")
-           redirect('/')
+           router.push('/login');
+           router.refresh(); 
         },
         onError: (ctx) => {
             toast.error("Signup Failed!!!")
