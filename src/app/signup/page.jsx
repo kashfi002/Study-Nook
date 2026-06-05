@@ -1,119 +1,154 @@
-"use client"
+"use client";
 import { Check } from '@gravity-ui/icons';
-import { Button, Card, Description, FieldError, Form, Input, Label, TextField } from '@heroui/react';
+import {
+  Button,
+  Card,
+  Description,
+  FieldError,
+  Form,
+  Input,
+  Label,
+  TextField
+} from '@heroui/react';
 import { authClient } from "@/lib/auth-client";
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { FaGoogle } from "react-icons/fa";
-import { createAuthClient } from "better-auth/client";
+import Link from 'next/link';
+
 const SignUpPage = () => {
-    const router = useRouter();
-    const authClient = createAuthClient();
-    const onSubmit=async(e)=>{
-      e.preventDefault();
-       const formData = new FormData(e.currentTarget)
-        const user = Object.fromEntries(formData.entries())
-       
-        const { data, error } = await authClient.signUp.email({
-        email:user.email, 
-        password:user.password,
-        name:user.name,
-        image:user.image 
-       
-    }, {
-        onRequest: (ctx) => {
-            //show loading
-        },
-        onSuccess: (ctx) => {
-           toast.success("You Have Successfully signed up")
-           router.push('/login');
-           router.refresh(); 
-        },
-        onError: (ctx) => {
-            toast.error("Signup Failed!!!")
-        },
-});
-    }
-    const handleGoogleSignUp = async () => {
-  const data = await authClient.signIn.social({
-    provider: "google",
-  });
-};
-    return (
-        <Card className='flex items-center'>
-            <h1 className='font-bold text-2xl text-center'>Create Account </h1>
-             <Form className="flex w-96 flex-col gap-4" onSubmit={onSubmit}>
-                <TextField
-        isRequired
-        name="name"
-        type="text"
-      >
-        <Label>Name</Label>
-        <Input placeholder="Enter your name" />
-        <FieldError />
-      </TextField>
+  const router = useRouter();
+  
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const user = Object.fromEntries(formData.entries());
 
-      <TextField
-        name="image"
-        type="url"
-      >
-        <Label>Image</Label>
-        <Input placeholder="Enter your image URL" />
-        <FieldError />
-      </TextField>
-
-      <TextField
-        isRequired
-        name="email"
-        type="email"
-        validate={(value) => {
-          if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
-            return "Please enter a valid email address";
-          }
-          return null;
-        }}
-      >
-        <Label>Email</Label>
-        <Input placeholder="john@example.com" />
-        <FieldError />
-      </TextField>
-      <TextField
-        isRequired
-        minLength={8}
-        name="password"
-        type="password"
-        validate={(value) => {
-          if (value.length < 8) {
-            return "Password must be at least 8 characters";
-          }
-          if (!/[A-Z]/.test(value)) {
-            return "Password must contain at least one uppercase letter";
-          }
-          if (!/[0-9]/.test(value)) {
-            return "Password must contain at least one number";
-          }
-          return null;
-        }}
-      >
-        <Label>Password</Label>
-        <Input placeholder="Enter your password" />
-        <Description>Must be at least 8 characters with 1 uppercase and 1 number</Description>
-        <FieldError />
-      </TextField>
-      <div className="flex gap-2 items-center">
-        <Button type="submit w-full">
-          <Check />
-          Create Account
-        </Button>
-      </div>
-      <div>
-        <button 
-        onClick={handleGoogleSignUp}
-        className='flex items-center gap-2 w-full'><span>Sign up with google</span><FaGoogle/></button>
-      </div>
-    </Form>
-        </Card>
+    const { data, error } = await authClient.signUp.email(
+      {
+        email: user.email,
+        password: user.password,
+        name: user.name,
+        image: user.image
+      },
+      {
+        onSuccess: () => {
+          toast.success("You have successfully signed up");
+          router.push('/');
+          router.refresh();
+        },
+        onError: () => {
+          toast.error("Signup failed!");
+        }
+      }
     );
+  };
+
+  const handleGoogleSignUp = async () => {
+    await authClient.signIn.social({ provider: "google" });
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <Card className="w-full max-w-md p-8 shadow-lg rounded-xl">
+        <h1 className="text-2xl font-semibold text-center mb-1">
+          Create an account
+        </h1>
+        <p className="text-sm text-gray-500 text-center mb-6">
+          Sign up to get started
+        </p>
+
+        <Form className="flex flex-col gap-4" onSubmit={onSubmit}>
+          <TextField isRequired name="name" type="text">
+            <Label>Name</Label>
+            <Input placeholder="Your full name" />
+            <FieldError />
+          </TextField>
+
+          <TextField name="image" type="url">
+            <Label>Profile Image (optional)</Label>
+            <Input placeholder="https://example.com/avatar.jpg" />
+            <FieldError />
+          </TextField>
+
+          <TextField
+            isRequired
+            name="email"
+            type="email"
+            validate={(value) => {
+              if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
+                return "Please enter a valid email address";
+              }
+              return null;
+            }}
+          >
+            <Label>Email</Label>
+            <Input placeholder="you@example.com" />
+            <FieldError />
+          </TextField>
+
+          <TextField
+            isRequired
+            minLength={8}
+            name="password"
+            type="password"
+            validate={(value) => {
+              if (value.length < 8) {
+                return "Password must be at least 8 characters";
+              }
+              if (!/[A-Z]/.test(value)) {
+                return "Password must contain at least one uppercase letter";
+              }
+              if (!/[0-9]/.test(value)) {
+                return "Password must contain at least one number";
+              }
+              return null;
+            }}
+          >
+            <Label>Password</Label>
+            <Input placeholder="••••••••" />
+            <Description className="text-xs text-gray-500">
+              At least 8 characters, 1 uppercase & 1 number
+            </Description>
+            <FieldError />
+          </TextField>
+
+          <Button
+            type="submit"
+            className="w-full flex items-center justify-center gap-2"
+          >
+            <Check />
+            Create Account
+          </Button>
+
+          <div className="relative my-2">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-gray-200" />
+            </div>
+            <div className="relative flex justify-center text-xs">
+              <span className="bg-white px-2 text-gray-400">OR</span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleGoogleSignUp}
+            className="w-full flex items-center justify-center gap-3 border rounded-md py-2 text-sm hover:bg-gray-50 transition"
+          >
+            <FaGoogle className="text-red-500" />
+            Sign up with Google
+          </button>
+
+          <p className="text-center text-sm text-gray-600 mt-4">
+            Already have an account?{" "}
+            <Link href="/login" className="text-blue-600 hover:underline">
+              Log in
+            </Link>
+          </p>
+        </Form>
+      </Card>
+    </div>
+  );
 };
 
 export default SignUpPage;

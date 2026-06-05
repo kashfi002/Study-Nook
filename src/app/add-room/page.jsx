@@ -1,5 +1,7 @@
 "use client"
 
+import { toast } from "react-toastify";
+
 const AddRoomPage = () => {
     const onSubmit = async (e) => {
         e.preventDefault()
@@ -13,7 +15,7 @@ const AddRoomPage = () => {
             body: JSON.stringify(room)
         })
         const data = await res.json()
-        console.log(data)
+        toast.success("Room added successfully")
     }
 
     return (

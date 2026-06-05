@@ -13,9 +13,7 @@ const Navbar = () => {
     router.push('/');
     router.refresh();
   }
-  const { 
-        data: session, 
-    } = authClient.useSession() 
+  const { data: session, } = authClient.useSession() 
     const user = session?.user
     return (
         <div>
@@ -52,7 +50,9 @@ const Navbar = () => {
       </li>
       <li>
          <Avatar className='rounded-full'>
-       <Avatar.Image alt="John Doe" src={user?.image} />
+       <Avatar.Image
+       referrerPolicy="no-referrer"
+        alt="John Doegi" src={user?.image} />
         <Avatar.Fallback>{user?.name?.charAt(0)}</Avatar.Fallback>
       </Avatar>
       </li>

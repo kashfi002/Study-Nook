@@ -1,3 +1,4 @@
+import BookingCard from '@/Components/BookingCard';
 import { Delete } from '@/Components/Delete';
 import { EditModal } from '@/Components/EditModal';
 import React from 'react';
@@ -9,7 +10,8 @@ const RoomDetailsPage = async ({ params }) => {
     const res = await fetch(`http://localhost:5000/rooms/${id}`, { cache: 'no-store' });
     const room = await res.json();
 
-    const{ roomName, description, image, floor, capacity, hourlyRate,amenities } = room;
+    const{ roomName, description, image, floor, capacity, hourlyRate } = room;
+    const { amenities = [] } = room;
 
 
     return (
@@ -18,7 +20,7 @@ const RoomDetailsPage = async ({ params }) => {
             <EditModal room={room}></EditModal>
             <Delete room={room}></Delete>
             </div>
-            <div className="max-w-6xl mx-auto">
+            < div className="max-w-6xl mx-auto">
             
                
                 {/* Main Content Grid */}
@@ -97,23 +99,11 @@ const RoomDetailsPage = async ({ params }) => {
                     </div>
 
                     {/* Right 1 Column: Sticky Pricing & Action Widget */}
-                    <div className="lg:sticky lg:top-8 bg-white p-6 rounded-3xl border border-gray-100 shadow-md space-y-6">
-                        <div>
-                            <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Total Rate</span>
-                            <div className="flex items-baseline gap-1 mt-1">
-                                <span className="text-4xl font-black text-gray-900">${room.hourlyRate || 0}</span>
-                                <span className="text-sm text-gray-500 font-medium">/ hour</span>
-                            </div>
-                        </div>
-
-                        <hr className="border-gray-100" />
-
-                        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-blue-500/20 transition-all active:scale-[0.98]">
-                            Book Now
-                        </button>
+                   <div>
+                    <BookingCard room={room}/>
+                   </div>
                     </div>
 
-                </div>
             </div>
         </div>
     );
