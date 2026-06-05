@@ -7,9 +7,9 @@ const db = client.db("study-nook");
 
 export const auth = betterAuth({
   database: mongodbAdapter(db, {
-    client
-  }
+    client,
   }),
-  emailAndPassword: { 
-    enabled: true, }
+  emailAndPassword: {
+    enabled: true,
+  },
 });
