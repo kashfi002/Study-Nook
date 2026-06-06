@@ -7,9 +7,8 @@ import { useState } from "react";
 export function BookingModal({room}) {
      const { data: session, } = authClient.useSession()
        const user = session?.user
-       console.log(user) 
     const hourlyRate = Number(room.hourlyRate) || 0;
-    const[departureDate,setDepartureDate]=useState(null)
+    const[bookingDate,setBookingDate]=useState(null)
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
 
@@ -19,13 +18,11 @@ export function BookingModal({room}) {
   };
 
   const handleEndTime = (val) => {
-    console.log("endTime val:", val); 
     setEndTime(val);
   };
 
   const calculateTotal = () => {
     if (!startTime || !endTime) return null;
-    // @heroui TimeField returns a TimeValue object with .hour and .minute
     const startMinutes = startTime.hour * 60 + startTime.minute;
     const endMinutes = endTime.hour * 60 + endTime.minute;
     const diffHours = (endMinutes - startMinutes) / 60;
@@ -41,14 +38,24 @@ export function BookingModal({room}) {
         userName: user?.name,
         userImage: user?.image,
         roomId: room._id,
-        departureDate: new Date(departureDate), 
+        bookingDate: new Date(bookingDate), 
         roomName: room.roomName,
         startTime,
         endTime,
-        result 
+        result
     }
-    console.log("Booking Data:", bookingData);
-  }
+    const res=await fetch("http://localhost:5000/booking",
+     {
+      method:"POST",
+      headers:{
+       'content-type':'application/json'
+      },
+    body:JSON.stringify(bookingData)
+    })
+    const data=await res.json()
+    toast.success("Room booked successfully!")
+     } 
+  
 
   return (
     <Modal>
@@ -67,7 +74,7 @@ export function BookingModal({room}) {
             <Modal.Body className="p-6">
               <Surface variant="default">
                 <form className="flex flex-col gap-6">
-                  <DateField onChange={setDepartureDate} name="date" className="w-full">
+                  <DateField onChange={setBookingDate} name="date" className="w-full">
                     <Label>Date of Booking</Label>
                     <DateField.Group>
                       <DateField.Input>
@@ -126,4 +133,4 @@ export function BookingModal({room}) {
       </Modal.Backdrop>
     </Modal>
   );
-}
+};

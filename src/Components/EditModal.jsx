@@ -4,7 +4,7 @@ import {Envelope} from "@gravity-ui/icons";
 import {Button, Input, Label, Modal, Surface, TextField} from "@heroui/react";
 
 export function EditModal({room}) {
-     const{_id, roomName, description, image, floor, capacity, hourlyRate,amenities} = room;
+     const{_id, roomName, description, image, floor, capacity, hourlyRate,amenities=[]} = room;
     const onSubmit = async (e) => {
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
