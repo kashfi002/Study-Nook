@@ -3,6 +3,7 @@
 import { authClient } from "@/lib/auth-client";
 import { Button, DateField, Description, FieldError, Label, Modal, Surface, TimeField } from "@heroui/react";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export function BookingModal({room}) {
      const { data: session, } = authClient.useSession()
@@ -40,6 +41,7 @@ export function BookingModal({room}) {
         roomId: room._id,
         bookingDate: new Date(bookingDate), 
         roomName: room.roomName,
+        image:room.image,
         startTime,
         endTime,
         result
@@ -55,7 +57,6 @@ export function BookingModal({room}) {
     const data=await res.json()
     toast.success("Room booked successfully!")
      } 
-  
 
   return (
     <Modal>

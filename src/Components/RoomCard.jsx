@@ -1,7 +1,8 @@
-
+"use client"
+import { authClient } from '@/lib/auth-client';
 import Link from 'next/link';
 import React from 'react';
-
+import { useRouter } from 'next/navigation';
 const RoomCard = ({ room }) => {
     const { 
         _id,
@@ -13,7 +14,17 @@ const RoomCard = ({ room }) => {
         hourlyRate, 
         amenities = [] 
     } = room;
+    const { data: session, } = authClient.useSession() 
+       const user = session?.user
+       const router = useRouter();
 
+    const handleBooking = () => {
+        if (!user) {
+            router.push('/login');
+        } else {
+            router.push(`/rooms/${_id}`);
+        }
+    }
     return (
         <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 flex flex-col h-full">
             
@@ -74,10 +85,12 @@ const RoomCard = ({ room }) => {
                     )}
                 </div>
 
-                {/* CTA Button */}
-               <Link href={`/rooms/${_id}`}><button className="w-full bg-gray-50 hover:bg-blue-600 text-gray-700 hover:text-white font-semibold py-2.5 px-4 rounded-xl transition-colors duration-200 mt-auto text-sm">
-                    Book This Room 
-                </button></Link> 
+                <button
+            onClick={handleBooking}
+            className="w-full bg-gray-50 hover:bg-blue-600 text-gray-700 hover:text-white font-semibold py-2.5 px-4 rounded-xl transition-colors duration-200 mt-auto text-sm"
+        >
+            View Details
+        </button>
             </div>
         </div>
     );

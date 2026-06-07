@@ -38,6 +38,7 @@ const Navbar = () => {
       <li><Link href={'/'} className='font-semibold'>Home</Link></li>
       <li><Link href={'/rooms'} className='font-semibold'>Rooms</Link></li>
       <li><Link href={'/add-room'} className='font-semibold'>Add Rooms</Link></li>
+      <li><Link href={'/my-bookings'} className='font-semibold'>My Bookings</Link></li>
     </ul>
   </div>
   <div className="navbar-end">

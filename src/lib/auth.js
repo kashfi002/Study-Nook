@@ -4,6 +4,8 @@ import { mongodbAdapter } from "better-auth/adapters/mongodb";
 
 const client = new MongoClient(process.env.MONGODB_URI);
 const db = client.db("study-nook");
+console.log("MONGO URI =", process.env.MONGODB_URI);
+const connectPromise = client.connect();
 
 export const auth = betterAuth({
   database: mongodbAdapter(db, {
@@ -13,9 +15,9 @@ export const auth = betterAuth({
     enabled: true,
   },
   socialProviders: {
-        google: { 
-            clientId: process.env.GOOGLE_CLIENT_ID, 
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET, 
-        }, 
-      }
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    },
+  },
 });

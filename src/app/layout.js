@@ -20,9 +20,10 @@ export default function RootLayout({ children }) {
       className={`${josefinSans.className}  h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Navbar></Navbar>
-         <ToastProvider />
-        {children}</body>
+        <Navbar />
+         <ToastProvider>
+        {children}
+        </ToastProvider></body>
     </html>
   );
 }
