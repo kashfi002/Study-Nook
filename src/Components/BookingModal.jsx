@@ -12,6 +12,7 @@ export function BookingModal({ room }) {
     const [bookingDate, setBookingDate] = useState(null);
     const [startTime, setStartTime] = useState(null);
     const [endTime, setEndTime] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const handleStartTime = (val) => setStartTime(val);
     const handleEndTime = (val) => setEndTime(val);
@@ -37,49 +38,50 @@ export function BookingModal({ room }) {
             toast.error("Please fill in all booking details.");
             return;
         }
-
         if (!result) {
             toast.error("End time must be after start time.");
             return;
         }
 
-        const bookingData = {
-            userId: user?.id,
-            userName: user?.name,
-            userImage: user?.image,
-            roomId: room._id,
-            bookingDate: `${bookingDate.year}-${String(bookingDate.month).padStart(2, '0')}-${String(bookingDate.day).padStart(2, '0')}`,
-            roomName: room.roomName,
-            image: room.image,
-            startTime: formatTime(startTime),
-            endTime: formatTime(endTime),
-            result
-        };
+        setLoading(true);
+        try {
+            const bookingData = {
+                userId: user?.id,
+                userName: user?.name,
+                userImage: user?.image,
+                roomId: room._id,
+                bookingDate: `${bookingDate.year}-${String(bookingDate.month).padStart(2, '0')}-${String(bookingDate.day).padStart(2, '0')}`,
+                roomName: room.roomName,
+                image: room.image,
+                startTime: formatTime(startTime),
+                endTime: formatTime(endTime),
+                result
+            };
 
-        const{data:tokenData} = await authClient.token();
-        console.log(tokenData)
+            const { data: tokenData } = await authClient.token();
+            const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/booking`, {
+                method: "POST",
+                headers: {
+                    'content-type': 'application/json',
+                    authorization: `Bearer ${tokenData?.token}`
+                },
+                body: JSON.stringify(bookingData)
+            });
 
-        const res = await fetch("http://localhost:5000/booking", {
-            method: "POST",
-            headers: { 'content-type': 'application/json',
-                authorization: `Bearer ${tokenData?.token}`
-             },
-            body: JSON.stringify(bookingData)
-        });
+            const data = await res.json();
 
-        const data = await res.json();
-
-        if (res.status === 409) {
-            toast.error("This room is already booked for the selected time!");
-            return;
+            if (res.status === 409) {
+                toast.error("This room is already booked for the selected time!");
+                return;
+            }
+            if (!res.ok) {
+                toast.error("Something went wrong. Please try again.");
+                return;
+            }
+            toast.success("Room booked successfully!");
+        } finally {
+            setLoading(false);
         }
-
-        if (!res.ok) {
-            toast.error("Something went wrong. Please try again.");
-            return;
-        }
-
-        toast.success("Room booked successfully!");
     };
 
     return (
@@ -145,7 +147,16 @@ export function BookingModal({ room }) {
                         </Modal.Body>
                         <Modal.Footer>
                             <Button slot="close" variant="secondary">Cancel Booking</Button>
-                            <Button onClick={handleBooking} slot="close">Confirm Booking</Button>
+                            <Button
+                                onClick={handleBooking}
+                                disabled={loading}
+                                slot="close"
+                            >
+                                {loading
+                                    ? <span className="loading loading-spinner loading-xs"></span>
+                                    : "Confirm Booking"
+                                }
+                            </Button>
                         </Modal.Footer>
                     </Modal.Dialog>
                 </Modal.Container>

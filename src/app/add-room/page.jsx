@@ -1,13 +1,13 @@
 "use client"
 
 import { authClient } from "@/lib/auth-client";
+import { useState } from "react";
 import { toast } from "react-toastify";
-import { useRouter } from 'next/navigation';
 
 const AddRoomPage = () => {
-     const router = useRouter();
     const { data: session } = authClient.useSession();
     const user = session?.user;
+    const [loading, setLoading] = useState(false);
 
     const onSubmit = async (e) => {
         e.preventDefault()
@@ -17,21 +17,26 @@ const AddRoomPage = () => {
             return;
         }
 
-        const formData = new FormData(e.currentTarget)
-        const room = Object.fromEntries(formData.entries())
-        room.amenities = formData.getAll('amenities');
-        room.creatorId = user?.id;
-        room.creatorName = user?.name;
-
-        const res = await fetch('http://localhost:5000/rooms', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(room)
-        })
-        const data = await res.json()
-        toast.success("Room added successfully")
-         router.push('/rooms');
-
+        setLoading(true);
+        try {
+            const formData = new FormData(e.currentTarget)
+            const room = Object.fromEntries(formData.entries())
+            room.amenities = formData.getAll('amenities');
+            room.creatorId = user?.id;
+            room.creatorName = user?.name;
+          const{data:tokenData} = await authClient.token();
+            const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/rooms`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json',
+                 authorization: `Bearer ${tokenData?.token}`
+                 },
+                body: JSON.stringify(room)
+            })
+            const data = await res.json()
+            toast.success("Room added successfully")
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -88,9 +93,15 @@ const AddRoomPage = () => {
                     ))}
                 </div>
 
-                <button type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg transition mt-4">
-                    Submit
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white px-4 py-3 rounded-lg transition mt-4 flex items-center justify-center"
+                >
+                    {loading
+                        ? <span className="loading loading-spinner loading-sm"></span>
+                        : "Submit"
+                    }
                 </button>
             </form>
         </div>

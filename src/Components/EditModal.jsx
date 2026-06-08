@@ -3,6 +3,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { Button, Modal, Surface } from "@heroui/react";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { authClient } from "@/lib/auth-client";
 
 export function EditModal({ room }) {
     const { _id, roomName, description, image, floor, capacity, hourlyRate, amenities = [] } = room;
@@ -12,11 +13,14 @@ export function EditModal({ room }) {
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
         const updatedRoom = Object.fromEntries(formData.entries())
-        updatedRoom.amenities = formData.getAll('amenities');
+        updatedRoom.amenities = formData.getAll('amenities')
 
-        const res = await fetch(`http://localhost:5000/rooms/${_id}`, {
+          const{data:tokenData} = await authClient.token();
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/rooms/${_id}`, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json',
+                  authorization: `Bearer ${tokenData?.token}`
+             },
             body: JSON.stringify(updatedRoom)
         })
         const data = await res.json()
