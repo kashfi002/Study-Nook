@@ -30,7 +30,7 @@ const HowItWorks = () => {
         <section className="py-20 px-4 bg-white">
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-14">
-                    <span className="text-xs font-bold uppercase tracking-widest text-blue-500">How it works</span>
+                    <span className="text-xs font-bold uppercase tracking-widest text-[#2563EB]">How it works</span>
                     <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2">
                         Book a room in 4 simple steps
                     </h2>
