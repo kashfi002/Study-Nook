@@ -3,11 +3,12 @@
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { toast } from "react-toastify";
-
+import { useRouter } from "next/navigation";
 const AddRoomPage = () => {
     const { data: session } = authClient.useSession();
     const user = session?.user;
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     const onSubmit = async (e) => {
         e.preventDefault()
@@ -34,6 +35,7 @@ const AddRoomPage = () => {
             })
             const data = await res.json()
             toast.success("Room added successfully")
+            router.push('/rooms');
         } finally {
             setLoading(false);
         }
