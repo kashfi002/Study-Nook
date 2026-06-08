@@ -6,6 +6,7 @@ import { CiTrash } from "react-icons/ci";
 export function Delete({room}) {
     const {_id} = room;
     const onDelete = async () => {
+      
         const res = await fetch(`http://localhost:5000/rooms/${_id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
@@ -15,9 +16,9 @@ export function Delete({room}) {
     };
   return (
     <AlertDialog>
-      <Button variant="outline" className="text-red-600 hover:text-red-700 font-medium">
+      <Button variant="outline" className="text-red-600 rounded-none hover:text-red-700 font-medium">
         <CiTrash/>
-        Delete Project
+        Delete Your Room
       </Button>
       <AlertDialog.Backdrop>
         <AlertDialog.Container>

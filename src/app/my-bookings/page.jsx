@@ -12,7 +12,6 @@ const StatusBadge = ({ status }) => {
             </span>
         );
     }
-
     return (
         <span className="px-3 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-500 border border-red-200">
             Cancelled
@@ -20,11 +19,18 @@ const StatusBadge = ({ status }) => {
     );
 };
 
+export const metadata = {
+  title: "My-Bookings",
+};
 const MyBookingPage = async () => {
+    const {token} =await auth.api.getToken({
+        headers: await headers()
+    })
     const session = await auth.api.getSession({ headers: await headers() });
     const user = session?.user;
 
     const res = await fetch(`http://localhost:5000/booking/${user?.id}`, {
+        headers: { authorization: `Bearer ${token}` },
         cache: 'no-store',
     });
     const bookings = await res.json();

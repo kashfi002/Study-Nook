@@ -1,6 +1,8 @@
 import RoomCard from '@/Components/RoomCard';
 import React from 'react';
-
+export const metadata = {
+  title: "All-Rooms",
+};
 const AllPage = async () => {
     const res = await fetch('http://localhost:5000/rooms')
     const rooms = await res.json()

@@ -1,20 +1,12 @@
 "use client";
 import { Check } from '@gravity-ui/icons';
-import {
-  Button,
-  Card,
-  Description,
-  FieldError,
-  Form,
-  Input,
-  Label,
-  TextField
-} from '@heroui/react';
+import {Button,Card,Description,FieldError,Form,Input,Label,TextField} from '@heroui/react';
 import { authClient } from "@/lib/auth-client";
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { FaGoogle } from "react-icons/fa";
 import Link from 'next/link';
+
 
 const SignUpPage = () => {
   const router = useRouter();
